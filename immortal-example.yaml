@@ -1,0 +1,11 @@
+cmd: ./digihub-app
+cwd: /home/kalladig/repositories/binaries/digihub-dev
+log:
+  file: /home/kalladig/repositories/binaries/digihub-dev/digihub-app.log
+  age: 86400
+  num: 7
+  size: 1
+pid:
+  parent: /home/kalladig/repositories/binaries/digihub-dev/digihub-app.pid
+  child: /home/kalladig/repositories/binaries/digihub-dev/digihub-app-child.pid
+onetime: false

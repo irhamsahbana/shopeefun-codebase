@@ -1,0 +1,54 @@
+# https://taskfile.dev
+
+version: '3'
+
+dotenv: ['.env']
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+  migrate:
+    cmds:
+      - migrate -path db/migrations -database "postgres://${SHOPEEFUN_POSTGRES_USER}:${SHOPEEFUN_POSTGRES_PASSWORD}@${SHOPEEFUN_POSTGRES_HOST}:${SHOPEEFUN_POSTGRES_PORT}/${SHOPEEFUN_POSTGRES_DB}?sslmode=${SHOPEEFUN_POSTGRES_SSL_MODE}" {{.cmd}}
+  create-migration:
+    cmds:
+      - migrate create -ext sql -dir db/migrations/ {{.name}} -tz UTC
+  seed:
+    cmds:
+      - go run ./cmd/bin/main.go seed -total={{.total}} -table={{.table}}
+  dev:
+    cmds:
+      - go run ./cmd/bin/main.go
+  ws:
+    cmds:
+      - go run ./cmd/bin/main.go ws --port=8080
+  build:
+    cmds:
+      - go build -o ./shopeefun-app ./cmd/bin/main.go
+  build-dev:
+    cmds:
+      - git pull
+      - go build -o ./shopeefun-app ./cmd/bin/main.go
+      - immortalctl stop shopeefun-dev
+      # - immortalctl halt shopeefun-dev
+      - mv ./shopeefun-app ../binaries/shopeefun-dev
+      # - immortal -c ../binaries/shopeefun-dev/shopeefun-dev.yaml
+      - immortalctl start shopeefun-dev
+      - immortalctl status
+  lint-fix:
+    cmds:
+      - gofmt -w .
+  lint-ci:
+    cmds:
+      - golangci-lint run
+  commit:
+    cmds:
+      - task lint-fix
+      - task lint-ci
+      - git add .
+      - git commit -m "{{.msg}}"
