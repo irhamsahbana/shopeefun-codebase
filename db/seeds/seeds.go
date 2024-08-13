@@ -93,8 +93,8 @@ func (s *Seed) deleteAll() {
 // rolesSeed seeds the roles table.
 func (s *Seed) rolesSeed() {
 	roleMaps := []map[string]any{
-		{"id": "01J3VHA25R8KTG9MQX43KBZ9MW", "name": "admin"},
-		{"id": "01J3VHA25R8KTG9MQX47GRF4KW", "name": "end_user"},
+		{"name": "admin"},
+		{"name": "end_user"},
 	}
 
 	tx, err := s.db.BeginTxx(context.Background(), nil)
@@ -115,8 +115,8 @@ func (s *Seed) rolesSeed() {
 	}()
 
 	_, err = tx.NamedExec(`
-		INSERT INTO roles (id, name)
-		VALUES (:id, :name)
+		INSERT INTO roles (name)
+		VALUES (:name)
 	`, roleMaps)
 	if err != nil {
 		log.Error().Err(err).Msg("Error creating roles")

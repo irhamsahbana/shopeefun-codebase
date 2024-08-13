@@ -11,7 +11,5 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMP WITH TIME ZONE,
 
-    FOREIGN KEY (role_id) REFERENCES roles (id),
-    FOREIGN KEY (branch_id) REFERENCES branches (id),
-    FOREIGN KEY (section_id) REFERENCES sections (id)
+    FOREIGN KEY (role_id) REFERENCES roles (id)
 );
